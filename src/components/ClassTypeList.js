@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddClassType from './AddClassType';
+import API_URL from '../config/api';
 
 const ClassTypeList = () => {
     const [classTypes, setClassTypes] = useState([]);
@@ -8,7 +9,7 @@ const ClassTypeList = () => {
 
     const fetchClassTypes = () => {
         setLoading(true);
-        axios.get('http://mma-backend-env.eu-north-1.elasticbeanstalk.com/classType')
+        axios.get(`${API_URL}classType`)
             .then(res => {
                 setClassTypes(res.data);
                 setLoading(false);

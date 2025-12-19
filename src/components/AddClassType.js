@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
 const AddClassType = ({ onAdded }) => {
     const [name, setName] = useState('');
@@ -10,7 +11,7 @@ const AddClassType = ({ onAdded }) => {
         if (!name.trim()) return;
 
         setLoading(true);
-        axios.post('http://mma-backend-env.eu-north-1.elasticbeanstalk.com/classType', { name })
+        axios.post(`${API_URL}classType`, { name })
             .then(res => {
                 setName('');
                 setLoading(false);

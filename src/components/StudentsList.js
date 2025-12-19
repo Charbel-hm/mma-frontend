@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
 const StudentsList = () => {
     const [students, setStudents] = useState([]);
@@ -7,7 +8,7 @@ const StudentsList = () => {
 
     useEffect(() => {
         setLoading(true);
-        axios.get('http://mma-backend-env.eu-north-1.elasticbeanstalk.com/students')
+        axios.get(`${API_URL}students`)
             .then(res => {
                 setStudents(res.data);
                 setLoading(false);
