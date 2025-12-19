@@ -4,11 +4,19 @@ import AddClassType from './AddClassType';
 
 const ClassTypeList = () => {
     const [classTypes, setClassTypes] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchClassTypes = () => {
-        axios.get('http://localhost:5000/classType')
-            .then(res => setClassTypes(res.data))
-            .catch(err => console.error(err.response || err));
+        setLoading(true);
+        axios.get('http://mma-backend-env.eu-north-1.elasticbeanstalk.com/classType')
+            .then(res => {
+                setClassTypes(res.data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err.response || err);
+                setLoading(false);
+            });
     };
 
     useEffect(() => {
@@ -16,16 +24,23 @@ const ClassTypeList = () => {
     }, []);
 
     return (
-        <div>
-            <h2>Martial Arts Types</h2>
+        <div className="section">
+            <h2 className="section-title">🥋 Martial Arts Types</h2>
             <AddClassType onAdded={fetchClassTypes} />
-            <ul>
-                {classTypes.length === 0 ? <li>No types found</li> : classTypes.map(ct => (
-                    <li key={ct.id}>{ct.name}</li>
-                ))}
-            </ul>
+            {loading ? (
+                <div className="loading">Loading class types...</div>
+            ) : classTypes.length === 0 ? (
+                <div className="empty-state">No class types found. Add one above!</div>
+            ) : (
+                <div className="badge-list">
+                    {classTypes.map(ct => (
+                        <span key={ct.id} className="badge">{ct.name}</span>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
 
 export default ClassTypeList;
+

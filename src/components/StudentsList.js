@@ -3,23 +3,47 @@ import axios from 'axios';
 
 const StudentsList = () => {
     const [students, setStudents] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/students')
-            .then(res => setStudents(res.data))
-            .catch(err => console.error(err.response || err));
+        setLoading(true);
+        axios.get('http://mma-backend-env.eu-north-1.elasticbeanstalk.com/students')
+            .then(res => {
+                setStudents(res.data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err.response || err);
+                setLoading(false);
+            });
     }, []);
 
     return (
-        <div>
-            <h2>Students</h2>
-            <ul>
-                {students.length === 0 ? <li>No students found</li> : students.map(s => (
-                    <li key={s.id}>{s.name} ({s.age}) - {s.classType}</li>
-                ))}
-            </ul>
+        <div className="section">
+            <h2 className="section-title">👥 Students</h2>
+            {loading ? (
+                <div className="loading">Loading students...</div>
+            ) : students.length === 0 ? (
+                <div className="empty-state">No students found</div>
+            ) : (
+                <div className="card-grid">
+                    {students.map(s => (
+                        <div key={s.id} className="card">
+                            <div className="card-title">{s.name}</div>
+                            <div className="card-detail">
+                                <span>👤</span>
+                                <span>Age: {s.age}</span>
+                            </div>
+                            {s.classType && (
+                                <div className="card-badge">{s.classType}</div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
 
 export default StudentsList;
+
